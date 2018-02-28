@@ -6,7 +6,7 @@ numRolls = length(sample);
 numRepeats = 10 .^ (1:4);
 
 %% Functions
-   function X = simResample(numRolls, numRepeats)
+   function X = simResample(numRepeats)
       X = sample(ceil(rand(numRolls, numRepeats) * numRolls));
    end
 
@@ -17,7 +17,7 @@ lenNumRepeats = length(numRepeats);
 figure(1);
 for iNumRepeats = 1:lenNumRepeats
    m = numRepeats(iNumRepeats);
-   S = simResample(numRolls, m);
+   S = simResample(m);
    medianDistribution = factorial(median(S, 1));
    subplot(4, 1, iNumRepeats);
    nbins = 25;
