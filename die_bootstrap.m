@@ -1,31 +1,23 @@
 function die_bootstrap
-%% Setup
+%% Setup for Constants
 sample = [3, 3, 2, 1, 3, 4, 1, 1, 2]';
-
-numRolls = length(sample);
 numRepeats = 10 .^ (1:4);
 
-%% Functions
 
-
-%%
-CNSUtils.FigureBuilder.setDefaults();
-fontSize = 18;
-set(groot, ...
-   'defaultAxesFontSize', fontSize, ...
-   'defaultTextFontSize',fontSize ...
-   );
+%% Performing all four bootstraps
+CNSUtils.FigureBuilder.setDefaults(); % set plotting defaults
 lenNumRepeats = length(numRepeats);
-[meanCache, stdevCache] = deal(zeros(lenNumRepeats, 1));
+[meanCache, stdevCache] = deal(zeros(lenNumRepeats, 1)); % initializing
+                                                         % parameter caches
+
 figure(1);
 for iNumRepeats = 1:lenNumRepeats
    m = numRepeats(iNumRepeats);
    S = simResample(sample, m);
    medianDistribution = factorial(median(S, 1));
+   
+   % Plotting
    subplot(4, 1, iNumRepeats);
-   nbins = 25;
-   %edges = ((1:20) - 1).*(721 / (nbins - 1));
-   edges = [0, factorial(1:4) + 0.5];
    p = histogram(medianDistribution, 'Normalization', 'probability', ...
       'EdgeColor', 'none', 'FaceColor', [31 78 121] ./ 300);
    text(25, 0.4, sprintf('m = %d', m), 'HorizontalAlignment', 'right', ...
@@ -42,10 +34,12 @@ for iNumRepeats = 1:lenNumRepeats
    else
       xticklabels('');
    end
+   
+   % saving the statistical parameters
    meanCache(iNumRepeats) = mean(medianDistribution);
    stdevCache(iNumRepeats) = std(medianDistribution);  
 end
+
 CNSUtils.saveAllFigures('die_bootstrapp');
 meanCache
 stdevCache
-end
